@@ -34,8 +34,16 @@ class APIService {
         do {
             
             let dict = try PropertyListSerialization.propertyList(from: plistData, options: .mutableContainersAndLeaves, format: &format) as! [String: Any]
-            self.appID = dict["TfLAppID"] as? String ?? ""
-            self.developerKey = dict["TfLDeveloperKey"] as? String ?? ""
+            
+            guard
+                let appID = dict["TfLAppID"] as? String,
+                let devKey = dict["TfLDeveloperKey"] as? String,
+                !appID.isEmpty && !devKey.isEmpty else {
+                fatalError("Please enter your API key and secret in AppConfig.plist.")
+            }
+            
+            self.appID = appID
+            self.developerKey = devKey
             
         } catch {
             fatalError("Cannot serialize property list (AppConfig.plist).")
