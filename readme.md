@@ -1,6 +1,7 @@
 # London Road
 <img src="http://forthebadge.com/images/badges/made-with-swift.svg" height="30">
 ___
+
 ## How to build and run the code
 1. Unarchive the .zip file and double click on `London Roads.xcodeproj`
 2. *(If only running on Simulator, skip this step)*  
