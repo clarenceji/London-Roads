@@ -28,9 +28,57 @@ class London_RoadsUITests: XCTestCase {
         super.tearDown()
     }
     
-    func testExample() {
-        // Use recording to get started writing UI tests.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testHideKeyboardOnReturn() {
+        
+        let app = XCUIApplication()
+        app.textFields["Road Number"].tap()
+        app.textFields["Road Number"].typeText("A4")
+        app.textFields["Road Number"].typeText("\n")
+        
+        let hasFocus = (app.textFields["Road Number"].value(forKey: "hasKeyboardFocus") as? Bool) ?? false
+        
+        XCTAssertEqual(hasFocus, false)
+        
+    }
+    
+    func testHideKeyboardOnTap() {
+        
+        let app = XCUIApplication()
+        app.textFields["Road Number"].tap()
+        app.textFields["Road Number"].typeText("A4")
+        XCUIApplication().otherElements.containing(.navigationBar, identifier:"London Roads").children(matching: .other).element.children(matching: .other).element.children(matching: .other).element.tap()
+        
+        
+        let hasFocus = (app.textFields["Road Number"].value(forKey: "hasKeyboardFocus") as? Bool) ?? false
+        
+        XCTAssertEqual(hasFocus, false)
+        
+    }
+    
+    func testPerformSegueWithCorrectInput() {
+        
+        let app = XCUIApplication()
+        app.textFields["Road Number"].tap()
+        app.textFields["Road Number"].typeText("A4")
+        app.textFields["Road Number"].typeText("\n")
+        app.buttons["Get status"].tap()
+        
+        XCTAssert(app.staticTexts["Status"].exists)
+        
+    }
+    
+    func testPresentingAlertWithInvalidInput() {
+        
+        let app = XCUIApplication()
+        app.textFields["Road Number"].tap()
+        app.textFields["Road Number"].typeText("A1989")
+        app.textFields["Road Number"].typeText("\n")
+        app.buttons["Get status"].tap()
+        
+        sleep(3)
+        
+        XCTAssert(app.alerts["The road name you entered cannot be found."].exists)
+        
     }
     
 }
